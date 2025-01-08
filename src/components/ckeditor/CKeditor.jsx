@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { CKEditor as CKEditorComponent, useCKEditorCloud } from '@ckeditor/ckeditor5-react';
-
+import { API_ENDPOINTS } from '../../config';
 import '../../index.css';
 
 const LICENSE_KEY =
-    'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzU5NDg3OTksImp0aSI6ImFmNTg1MzBjLWJkZTItNDExZS04Y2ViLWRjM2VhZDIwYTYzMyIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjY0NmMxM2UyIn0.htzd4mbtVMP7hkY1yo08aCWSsBW9Chs6bAqLx4xMJzUbADGuIzZBb-3stsDoSNn83hTJbMSBCjstKQJozuzTkQ';
+    'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Njc5MTY3OTksImp0aSI6IjFhMDIzZDA5LTUwZmYtNDQ4Zi04ZDA0LTViZDdiODZlZDA1YyIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCJdLCJ2YyI6IjdhZjQ3NTliIn0.ecMukZfOzw76OzGxJLavvJ4fKSY0pEoT_k1JKQxKdITkoyjDFgjDaF4jj_lFcl7tu7FqHIfR3Cf7oulF4WZSeQ';
 
 const CKEditor = ({ onChange, initialData }) => {
     const editorContainerRef = useRef(null);
@@ -183,6 +183,13 @@ const CKEditor = ({ onChange, initialData }) => {
                     TodoList,
                     Underline
                 ],
+                simpleUpload: {
+                    uploadUrl: API_ENDPOINTS.UPLOAD_IMAGE,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                    fileName: 'image'
+                  },
                 balloonToolbar: ['bold', 'italic', '|', 'link', 'insertImage', '|', 'bulletedList', 'numberedList'],
                 blockToolbar: [
                     'fontSize',

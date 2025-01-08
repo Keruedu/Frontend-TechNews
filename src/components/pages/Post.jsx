@@ -96,10 +96,10 @@ const Post = () => {
                 <div>
                     <DatePost Data={createdAt} PostStyle={true} />
                 </div>
+                <div className='main-container ck-content' dangerouslySetInnerHTML={{ __html: content }} />
                 <div>
                     <img src={thumbnail} alt="" className='rounded-xl' />
                 </div>
-                <div dangerouslySetInnerHTML={{ __html: content }} />
                 <div className='flex flex-col'>
                     <div className='flex flex-row gap-[10px] text-gray-400 my-[10px]'>
                         <span>{upvotesCount} Upvotes</span>

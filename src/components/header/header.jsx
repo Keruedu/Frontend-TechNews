@@ -18,7 +18,7 @@ const Header = () => {
 
     return (
         <header className='flex flex-row items-center justify-between sticky top-0 z-50 px-[16px] py-[12px] border-b-[1px] bg-white text-[#333] dark:bg-[#0e1217] dark:text-[#fff] border-gray-700'>
-            <a href='./'><img src={Techlogo} alt="Tech logo" className='h-[30px] w-auto' /></a>
+            <a href='/'><img src={Techlogo} alt="Tech logo" className='h-[30px] w-auto' /></a>
             <div className='flex flex-row gap-[12px]'>
                 <SquareButton content={
                     <Link to="/create">

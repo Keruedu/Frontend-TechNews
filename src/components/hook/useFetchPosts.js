@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { API_ENDPOINTS } from '../../config';
 
-const useFetchPosts = (initialPage, initialFilters) => {
+const useFetchPosts = (initialPage, initialFilters, authorId = null) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(initialPage);
@@ -9,7 +9,7 @@ const useFetchPosts = (initialPage, initialFilters) => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
 
-  const fetchPosts = async (page, filters) => {
+  const fetchPosts = async (page, filters, authorId) => {
     const { sortField, sortType, startDate, endDate, selectedTags, selectedCategories, searchQuery } = filters;
 
     try {
@@ -23,7 +23,8 @@ const useFetchPosts = (initialPage, initialFilters) => {
           endDate,
           tagIds: selectedTags.map(tag => tag.value),
           categoryIds: selectedCategories.map(category => category.value),
-          search: searchQuery
+          search: searchQuery,
+          authorId: authorId // Thêm authorId vào body của request
         })
       });
 
@@ -33,7 +34,11 @@ const useFetchPosts = (initialPage, initialFilters) => {
 
       const result = await response.json();
       if (result.success) {
-        setData(prevData => [...prevData, ...result.data]);
+        if (page === 1) {
+          setData(result.data); // Reset data when fetching the first page
+        } else {
+          setData(prevData => [...prevData, ...result.data]);
+        }
         setHasMore(result.data.length > 0);
       } else {
         console.error('Error fetching posts:', result.message);
@@ -47,8 +52,8 @@ const useFetchPosts = (initialPage, initialFilters) => {
   };
 
   useEffect(() => {
-    fetchPosts(page, filters);
-  }, [page, filters]);
+    fetchPosts(page, filters, authorId);
+  }, [page, filters, authorId]);
 
   const loadMore = () => {
     setLoadingMore(true);
@@ -57,7 +62,7 @@ const useFetchPosts = (initialPage, initialFilters) => {
 
   const applyFilters = (newFilters) => {
     setPage(1);
-    setData([]);
+    setData([]); // Reset data when applying new filters
     setFilters(newFilters);
   };
 

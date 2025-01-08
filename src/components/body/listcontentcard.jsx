@@ -5,7 +5,7 @@ import useFetchPosts from '../hook/useFetchPosts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const ListContentCard = ({ width = 'w-[84.2%]' }) => {
+const ListContentCard = ({ width = 'w-[84.2%]', selectionMode = false, onPostSelect, selectedPosts = [], authorId = null, isEditable = false }) => {
   const { data, loading, hasMore, loadingMore, loadMore, applyFilters } = useFetchPosts(1, {
     sortField: 'createdAt',
     sortType: 'desc',
@@ -14,7 +14,7 @@ const ListContentCard = ({ width = 'w-[84.2%]' }) => {
     selectedTags: [],
     selectedCategories: [],
     searchQuery: '',
-  });
+  }, authorId);
 
   return (
     <div className={`flex flex-col px-[40px] py-[20px] gap-[40px] ${width}`}>
@@ -37,6 +37,10 @@ const ListContentCard = ({ width = 'w-[84.2%]' }) => {
             Category={da.categoryId}
             UserProfileImage={da.authorId.profile.avatar}
             Organization={da.organization ? da.organization.name : null}
+            selectionMode={selectionMode}
+            onPostSelect={onPostSelect}
+            isSelected={selectedPosts.includes(da._id)}
+            isEditable={isEditable} // Truyền prop isEditable
           />
         ))}
       </div>

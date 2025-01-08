@@ -23,13 +23,29 @@ const ContentCard = ({
   ReactionsCount,
   ReadingTime,
   UserProfileImage,
-  Organization
+  Organization,
+  selectionMode = false,
+  onPostSelect,
+  isSelected = false,
+  isEditable = false // Thêm prop để xác định có thể chỉnh sửa bài viết hay không
 }) => {
   const navigate = useNavigate();
   const [showReadCard, setShowReadCard] = useState(false);
 
   const handleNavigate = () => {
-    navigate(`/post/${ID}`);
+    if (!selectionMode) {
+      if (isEditable) {
+        navigate(`/edit/${ID}`); // Điều hướng đến trang chỉnh sửa bài viết
+      } else {
+        navigate(`/post/${ID}`);
+      }
+    }
+  };
+
+  const handleSelect = () => {
+    if (selectionMode && onPostSelect) {
+      onPostSelect(ID);
+    }
   };
 
   // Ensure Tags is an array
@@ -37,7 +53,21 @@ const ContentCard = ({
   console.log(tagsArray);
   return (
     <>
-      <div className='flex flex-col p-[8px] rounded-[16px] w-full md:w-[26.7%] min-w-[262px] h-[386px] border-[1px] bg-slate-100 text-[#333] border-gray-400 dark:bg-[#1c1f26] dark:text-[#fff] dark:border-gray-800 hover:border-gray-600'>
+      <div
+        className={`relative flex flex-col p-[8px] rounded-[16px] w-full md:w-[26.7%] min-w-[262px] h-[386px] border-[1px] bg-slate-100 text-[#333] border-gray-400 dark:bg-[#1c1f26] dark:text-[#fff] dark:border-gray-800 hover:border-gray-600 ${isSelected ? 'border-blue-500' : ''}`}
+        onClick={handleSelect}
+      >
+        {selectionMode && (
+          <>
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={handleSelect}
+              className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-blue-500 focus:ring-blue-500"
+            />
+            <div className="absolute inset-0 bg-black opacity-25 z-0 rounded-[16px]"></div>
+          </>
+        )}
         <div className='flex flex-col px-[6px] justify-between items-start flex-1'>
           <div className='flex flex-col w-full'>
             <div className='flex justify-center items-center size-8'>
