@@ -16,4 +16,5 @@ export const API_ENDPOINTS = {
     UPVOTE: `${API_BASE_URL}/posts/:id/upvote`,
     DOWNVOTE: `${API_BASE_URL}/posts/:id/downvote`,
     BOOKMARK: `${API_BASE_URL}/posts/:id/bookmark`,
+    UPLOAD_IMAGE: `${API_BASE_URL}/users/upload`
 };

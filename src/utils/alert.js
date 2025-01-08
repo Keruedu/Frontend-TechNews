@@ -12,7 +12,7 @@ const baseSwalOptions = {
 };
 
 export const showSuccessAlert = (title, text) => {
-  Swal.fire({
+  return Swal.fire({
     ...baseSwalOptions,
     icon: 'success',
     title: title,
