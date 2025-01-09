@@ -19,7 +19,7 @@ import ReviewPosts from '../pages/ReviewPosts.jsx';
 import ManageCategories from '../pages/ManageCategories.jsx';
 import ManageAccounts from '../pages/ManageAccounts.jsx';
 import MyPost from '../pages/MyPost.jsx';
-import EditPost from '../pages/EditPost.jsx';
+import EditPost from '../pages/EditPost.jsx'; // Import EditPost component
 
 const AppRouter = () => {
     const [user, setUser] = useState(null);
@@ -29,7 +29,14 @@ const AppRouter = () => {
         setUser(userData);
     }, []);
 
-    const ProtectedRoute = ({ children }) => {
+    const ProtectedRoute = ({ children, roles }) => {
+        if (!user || !roles.includes(user.role)) {
+            return <Navigate to="/" />;
+        }
+        return children;
+    };
+
+    const AdminProtectedRoute = ({ children }) => {
         if (!user || user.role !== 'ADMIN') {
             return <Navigate to="/" />;
         }
@@ -41,14 +48,13 @@ const AppRouter = () => {
             <Routes>
                 <Route path="/" element={<Body content={<ListContentCard />} />} />
                 <Route path="/create" element={<Body content={<CreatePost />} />} />
-                <Route path="/edit/:id" element={<Body content={<EditPost />} />} />
                 <Route path="/customfeed" element={<Body content={<div>Custom Feed Content</div>} />} />
                 <Route path="/mypost" element={<Body content={<MyPost />} />} />
                 <Route path="/publicpost" element={<Body content={<div>Public Post Content</div>} />} />
                 <Route path="/explore" element={<Body content={<div>Explore Content</div>} />} />
                 <Route path="/discussion" element={<Body content={<div>Discussion Content</div>} />} />
                 <Route path="/tag" element={<Body content={<div>Tag Content</div>} />} />
-                <Route path="/bookmarks" element={<Body content={<div>Bookmarks Content</div>} />} />
+                <Route path="/bookmarks" element={<Body content={<ListContentCard isBookmarked={true} />} />} />
                 <Route path="/history" element={<Body content={<div>History Content</div>} />} />
                 <Route path="/docs" element={<Body content={<div>Docs Content</div>} />} />
                 <Route path="/changelog" element={<Body content={<div>Changelog Content</div>} />} />
@@ -61,10 +67,11 @@ const AppRouter = () => {
                 <Route path="/profile" element={<Body content={<Profile />} />} />
                 <Route path="/edit-profile" element={<Body content={<EditProfile />} />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/admin/dashboard" element={<ProtectedRoute><Body content={<Dashboard />} /></ProtectedRoute>} />
-                <Route path="/admin/review-posts" element={<ProtectedRoute><Body content={<ReviewPosts />} /></ProtectedRoute>} />
-                <Route path="/admin/manage-categories" element={<ProtectedRoute><Body content={<ManageCategories />} /></ProtectedRoute>} />
-                <Route path="/admin/manage-accounts" element={<ProtectedRoute><Body content={<ManageAccounts />} /></ProtectedRoute>} />
+                <Route path="/admin/dashboard" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<Dashboard />} /></ProtectedRoute>} />
+                <Route path="/admin/review-posts" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<ReviewPosts />} /></ProtectedRoute>} />
+                <Route path="/admin/manage-categories" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<ManageCategories />} /></ProtectedRoute>} />
+                <Route path="/admin/manage-accounts" element={<AdminProtectedRoute><Body content={<ManageAccounts />} /></AdminProtectedRoute>} />
+                <Route path="/edit/:id" element={<Body content={<EditPost />} />} /> {/* Add route for editing posts */}
             </Routes>
         </Router>
     );
