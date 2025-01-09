@@ -78,7 +78,7 @@ const ContentCard = ({
   return (
     <>
       <div
-        className={`relative flex flex-col p-4 rounded-2xl w-full md:w-1/3 min-w-[262px] h-[386px] border bg-slate-100 text-gray-800 border-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 hover:border-gray-600 ${isSelected ? 'border-blue-500' : ''}`}
+        className={`relative flex flex-col p-4 rounded-2xl w-full md:w-1/3 min-w-[262px] h-[386px] max-w-[318.4px] border bg-slate-100 text-gray-800 border-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 hover:border-gray-600 ${isSelected ? 'border-blue-500' : ''}`}
         onClick={handleSelect}
       >
         <div className='flex flex-col px-2 justify-between items-start flex-1'>

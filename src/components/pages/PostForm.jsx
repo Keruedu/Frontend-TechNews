@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CKEditor from '../ckeditor/ckeditor.jsx';
+import CKEditor from '../ckeditor/CKeditor.jsx';
 import { API_ENDPOINTS } from '../../config';
 import { showSuccessAlert, showDeniedAlert } from '../../utils/alert';
 
@@ -89,6 +89,7 @@ const PostForm = ({ postId, initialData, onSubmit }) => {
 
     return (
         <div className='flex flex-col justify-center w-[84.2%] p-4'>
+            <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>Create Post</h1>
             <div className='px-5 mt-6 w-full '>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                     <div className='relative '>
@@ -107,14 +108,14 @@ const PostForm = ({ postId, initialData, onSubmit }) => {
                         </label>
                     </div>
                     <div className='group flex flex-col items-stretch mt-6 w-full'>
-                        <div className='relative flex rounded-2xl flex-row items-center h-12 px-4 overflow-hidden border-l-2 dark:text-gray-400 border-gray-700 dark:bg-gray-700 bg-white hover:border-l-2 dark:hover:border-white cursor-text group-hover:text-white dark:focus-within:text-white dark:focus-within:border-white'>
+                        <div className='relative flex rounded-2xl flex-row items-center h-12 px-4 overflow-hidden border-l-2 dark:text-gray-400 border-gray-700 dark:bg-gray-700 bg-gray-100 text-black hover:border-l-2 dark:hover:border-white cursor-text group-hover:text-gray-400 dark:focus-within:text-white dark:focus-within:border-white'>
                             <input
                                 placeholder='Post Title*'
                                 name='title'
                                 id='title'
                                 maxLength={maxTitleLength}
                                 size='1'
-                                className='self-stretch text-ellipsis group-hover:placeholder-white focus:text-white focus:placeholder-white  min-w-0 bg-transparent focus:outline-none w-full h-full px-2'
+                                className='self-stretch text-ellipsis dark:group-hover:placeholder-white focus:text-black dark:focus:text-white dark:focus:placeholder-white  min-w-0 bg-transparent focus:outline-none w-full h-full px-2'
                                 required
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}

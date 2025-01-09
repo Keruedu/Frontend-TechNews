@@ -15,7 +15,17 @@ const CKEditor = ({ onChange, initialData }) => {
     useEffect(() => {
         setIsLayoutReady(true);
 
-        return () => setIsLayoutReady(false);
+        const handleResize = () => {
+            if (editorContainerRef.current) {
+                editorContainerRef.current.style.width = '100%';
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     const { ClassicEditor, editorConfig } = useMemo(() => {
@@ -188,7 +198,6 @@ const CKEditor = ({ onChange, initialData }) => {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     },
-                    fileName: 'image'
                   },
                 balloonToolbar: ['bold', 'italic', '|', 'link', 'insertImage', '|', 'bulletedList', 'numberedList'],
                 blockToolbar: [
@@ -365,12 +374,12 @@ const CKEditor = ({ onChange, initialData }) => {
     }, [cloud, isLayoutReady]);
 
     return (
-        <div className="main-container">
+        <div className="main-container w-full">
             <div
-                className="editor-container editor-container_classic-editor editor-container_include-style"
+                className="editor-container editor-container_classic-editor editor-container_include-style w-full"
                 ref={editorContainerRef}
             >
-                <div className="editor-container__editor text-black">
+                <div className="editor-container__editor text-black w-full">
                     <div ref={editorRef}>
                         {ClassicEditor && editorConfig && (
                             <CKEditorComponent

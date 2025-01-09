@@ -26,12 +26,72 @@
 }
 
 .editor-container_classic-editor .editor-container__editor {
-	width: 100%;
-	max-width: 795px;
+    width: 100%;
+    max-width: 100%;
 }
 
-.editor-container_include-block-toolbar {
-	margin-left: 42px;
+@media (min-width: 640px) {
+    .editor-container_classic-editor .editor-container__editor {
+        max-width: 640px; /* max-width cho màn hình nhỏ */
+    }
+}
+
+@media (min-width: 1280px) {
+    .editor-container_classic-editor .editor-container__editor {
+        max-width: 1280px; /* max-width cho màn hình rất lớn */
+    }
+}
+
+.dark .editor-container_classic-editor .editor-container__editor {
+    background-color: #1f2937 !important; /* Màu nền cho chế độ tối */
+    color: #fff !important; /* Màu chữ cho chế độ tối */
+}
+
+.dark .ck-content {
+    background-color: #1f2937 !important; /* Màu nền cho nội dung CKEditor trong chế độ tối */
+    color: #fff !important; /* Màu chữ cho nội dung CKEditor trong chế độ tối */
+}
+
+.dark .ck.ck-editor__top .ck-toolbar {
+    background-color: #1f2937 !important; /* Màu nền cho thanh công cụ trong chế độ tối */
+    color: #fff !important; /* Màu chữ cho thanh công cụ trong chế độ tối */
+}
+
+.dark .ck.ck-dropdown__panel .ck-list__item {
+    background-color: #1f2937 !important; /* Màu nền cho menu dropdown trong chế độ tối */
+    color: #d1d5db !important; /* Màu chữ cho menu dropdown trong chế độ tối */
+}
+
+.dark .ck.ck-dropdown__panel .ck-list__item:hover {
+    background-color: #374151 !important; /* Màu nền khi hover cho menu dropdown trong chế độ tối */
+}
+
+.dark .ck.ck-toolbar__items {
+    background-color: #1f2937 !important; /* Màu nền cho các mục trong thanh công cụ */
+    color: #d1d5db !important; /* Màu chữ cho các mục trong thanh công cụ */
+}
+
+.dark .ck.ck-toolbar__items .ck-button {
+    background-color: #1f2937 !important; /* Màu nền cho các nút trong thanh công cụ */
+    color: #d1d5db !important; /* Màu chữ cho các nút trong thanh công cụ */
+}
+
+.dark .ck.ck-toolbar__items .ck-button:hover {
+    background-color: #374151 !important; /* Màu nền khi hover cho các nút trong thanh công cụ */
+}
+
+.dark .ck.ck-menubar {
+    background-color: #1f2937 !important; /* Màu nền cho thanh menu trong chế độ tối */
+    color: #d1d5db !important; /* Màu chữ cho thanh menu trong chế độ tối */
+}
+
+.dark .ck.ck-menubar .ck-button {
+    background-color: #1f2937 !important; /* Màu nền cho các nút trong thanh menu */
+    color: #d1d5db !important; /* Màu chữ cho các nút trong thanh menu */
+}
+
+.dark .ck.ck-menubar .ck-button:hover {
+    background-color: #374151 !important; /* Màu nền khi hover cho các nút trong thanh menu */
 }
 
 .ck-content h3.category {

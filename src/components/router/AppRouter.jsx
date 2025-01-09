@@ -59,6 +59,7 @@ const AppRouter = () => {
                 <Route path="/docs" element={<Body content={<div>Docs Content</div>} />} />
                 <Route path="/changelog" element={<Body content={<div>Changelog Content</div>} />} />
                 <Route path="/feedback" element={<Body content={<div>Feedback Content</div>} />} />
+                <Route path="/category" element={<Body content={<div>Category Content</div>} />} />
                 <Route path="/post/:id" element={<Body content={<Post />} />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/login" element={<Login />} />
