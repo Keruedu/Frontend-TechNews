@@ -3,3 +3,6 @@ node_modules/
 
 # Bỏ qua tệp .env
 .env
+
+# Bỏ qua thư mục dist
+dist/
