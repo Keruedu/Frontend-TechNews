@@ -16,18 +16,17 @@ const ManageAccounts = () => {
   const [searchInput, setSearchInput] = useState('');
   const [inputPage, setInputPage] = useState('1');
   const accountPage = 10;
+  const [isInitialMount, setIsInitialMount] = useState(true);
 
   // Lấy danh sách tài khoản theo trang và từ khóa tìm kiếm
   const fetchAccounts = async (page, search = '') => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      // Encode search term để tránh vấn đề với các ký tự đặc biệt
       const encodedSearch = encodeURIComponent(search.trim());
-      console.log('Searching with term:', encodedSearch); // Debug log
 
       const response = await axios.get(
-        `http://localhost:4000/api/users/manage?page=${page}&limit=${accountPage}&search=${encodedSearch}`,
+        `http://localhost:4000/api/users/manage-accounts?page=${page}&limit=${accountPage}&search=${encodedSearch}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -36,23 +35,34 @@ const ManageAccounts = () => {
       );
       
       if (response.data.success) {
-        console.log('Search results:', response.data); // Debug log
         setAccounts(response.data.data);
         setTotalPages(response.data.pagination.totalPages);
         setTotalItems(response.data.pagination.totalItems);
-        setCurrentPage(response.data.pagination.currentPage);
+        setCurrentPage(page);
       }
     } catch (error) {
       console.error('Error loading accounts:', error);
-      alert(error.response?.data?.message || 'Error loading accounts');
+      // Chỉ hiển thị alert khi không phải initial mount
+      if (!isInitialMount) {
+        alert(error.response?.data?.message || 'Error loading accounts');
+      }
     } finally {
       setLoading(false);
+      if (isInitialMount) setIsInitialMount(false);
     }
   };
 
+  // useEffect cho initial load
   useEffect(() => {
-    fetchAccounts(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
+    fetchAccounts(1, searchTerm);
+  }, []); // Chỉ chạy một lần khi mount
+
+  // useEffect riêng cho search và pagination
+  useEffect(() => {
+    if (!isInitialMount) {
+      fetchAccounts(currentPage, searchTerm);
+    }
+  }, [currentPage, searchTerm]); // Chạy khi currentPage hoặc searchTerm thay đổi
 
   // Xử lý tìm kiếm khi nhấn Enter
   const handleSearchKeyDown = (e) => {
@@ -89,18 +99,22 @@ const ManageAccounts = () => {
   // Xử lý cấm/bỏ cấm tài khoản
   const handleToggleBan = async (account) => {
     try {
+      // 1. Lấy token để xác thực
       const token = localStorage.getItem('token');
+      
+      // 2. Gửi request đến backend
+      console.log('Sending request to:', `http://localhost:4000/api/users/${account._id}/toggle-ban`); // Debug log
       const response = await axios.patch(
-        `http://localhost:4000/api/users/${account._id}/ban`,
-        {},
+        `http://localhost:4000/api/users/${account._id}/toggle-ban`,
+        {}, // body trống vì chỉ cần id từ URL
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
 
+      // 3. Xử lý response từ backend
       if (response.data.success) {
+        // Cập nhật UI
         setAccounts(accounts.map(acc => 
           acc._id === account._id 
             ? { ...acc, isBanned: !acc.isBanned }
@@ -109,10 +123,9 @@ const ManageAccounts = () => {
         alert(response.data.message);
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert(error.response?.data?.message || 'Error performing action');
+      console.error('Error details:', error.response || error); // Chi tiết lỗi
+      alert(error.response?.data?.message || 'Error updating ban status');
     }
-    setSelectedAccount(null); // Đóng dropdown
   };
 
   // Xử lý thay đổi giá trị input

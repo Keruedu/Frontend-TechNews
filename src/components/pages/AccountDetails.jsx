@@ -54,7 +54,7 @@ const AccountDetails = () => {
             className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 
                      hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200"
           >
-            ← Back to List
+            &larr; Back to List
           </button>
         </div>
 
