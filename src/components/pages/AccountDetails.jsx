@@ -37,84 +37,171 @@ const AccountDetails = () => {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-white dark:bg-[#1E293B] flex items-center justify-center">
+      <div className="ml-[15.8%] w-[84.2%] h-full flex items-center justify-center">
         <div className="text-gray-600 dark:text-gray-400">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-[#1E293B]">
+    <div className="ml-[15.8%] w-[84.2%] h-full bg-white dark:bg-[#1E293B]">
       <div className="p-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Account Details</h2>
           <button
             onClick={() => navigate('/admin/manage-accounts')}
-            className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+            className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 
+                     hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200"
           >
-            &larr; Back to List
+            ← Back to List
           </button>
         </div>
 
         {/* User Details Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="grid grid-cols-2 gap-6">
-            {/* Basic Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Basic Information</h3>
-              
-              <div>
-                <label className="text-sm text-gray-500 dark:text-gray-400">Username</label>
-                <p className="text-gray-800 dark:text-gray-200">{user.username}</p>
+        <div className="w-full overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+          <div className="p-6">
+            <div className="grid grid-cols-2 gap-8">
+              {/* Basic Information - Left Column */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+                  Basic Information
+                </h3>
+                
+                <div className="grid grid-cols-1 gap-4">
+                  {/* Avatar */}
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Avatar</label>
+                    <div className="p-2">
+                      <img 
+                        src={user.profile?.avatar || '/default-avatar.png'} 
+                        alt="User avatar"
+                        className="w-20 h-20 rounded-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Username</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md break-words">
+                      {user.username}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Full Name</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md break-words">
+                      {user.profile?.name || 'Not updated'}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Email</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md break-words">
+                      {user.email}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Role</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md break-words">
+                      {user.role}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</label>
+                    <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                        user.isBanned 
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200'
+                          : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200'
+                      }`}>
+                        {user.isBanned ? 'Banned' : 'Active'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label className="text-sm text-gray-500 dark:text-gray-400">Full Name</label>
-                <p className="text-gray-800 dark:text-gray-200">{user.profile?.name || 'Not updated'}</p>
-              </div>
+              {/* Additional Information - Right Column */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+                  Additional Information
+                </h3>
+                
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Bio</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md break-words whitespace-pre-wrap">
+                      {user.profile?.bio || 'No bio provided'}
+                    </p>
+                  </div>
 
-              <div>
-                <label className="text-sm text-gray-500 dark:text-gray-400">Email</label>
-                <p className="text-gray-800 dark:text-gray-200">{user.email}</p>
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Created At</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                      {new Date(user.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
 
-              <div>
-                <label className="text-sm text-gray-500 dark:text-gray-400">Role</label>
-                <p className="text-gray-800 dark:text-gray-200">{user.role}</p>
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Last Updated</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                      {new Date(user.updatedAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
 
-              <div>
-                <label className="text-sm text-gray-500 dark:text-gray-400">Status</label>
-                <span className={`inline-block px-2 py-1 rounded ${
-                  user.isBanned 
-                    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                    : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                }`}>
-                  {user.isBanned ? 'Banned' : 'Active'}
-                </span>
-              </div>
-            </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Last Login</label>
+                    <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                      {new Date(user.lastLogin).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
 
-            {/* Additional Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Additional Information</h3>
-              
-              <div>
-                <label className="text-sm text-gray-500 dark:text-gray-400">Created At</label>
-                <p className="text-gray-800 dark:text-gray-200">
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </p>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Activity Summary</label>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Bookmarks</p>
+                        <p className="text-gray-800 dark:text-gray-200 font-medium">
+                          {user.bookmarkedPosts?.length || 0}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Upvotes</p>
+                        <p className="text-gray-800 dark:text-gray-200 font-medium">
+                          {user.upvotedPosts?.length || 0}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Downvotes</p>
+                        <p className="text-gray-800 dark:text-gray-200 font-medium">
+                          {user.downvotedPosts?.length || 0}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div>
-                <label className="text-sm text-gray-500 dark:text-gray-400">Last Updated</label>
-                <p className="text-gray-800 dark:text-gray-200">
-                  {new Date(user.updatedAt).toLocaleDateString()}
-                </p>
-              </div>
-
-              {/* Thêm các thông tin khác nếu cần */}
             </div>
           </div>
         </div>
