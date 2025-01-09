@@ -6,6 +6,8 @@ import ControlCard from './controlcard.jsx';
 import ReadCard from './readcard.jsx';
 import Techlogo from '../../assets/react.svg';
 import Testimage from '../../assets/Testing.jpg';
+import { updatePostStatus } from '../api/post';
+import { showSuccessAlert, showDeniedAlert } from '../../utils/alert';
 
 const ContentCard = ({
   ID,
@@ -27,15 +29,20 @@ const ContentCard = ({
   selectionMode = false,
   onPostSelect,
   isSelected = false,
-  isEditable = false // Thêm prop để xác định có thể chỉnh sửa bài viết hay không
+  isEditable = false,
+  Status: initialStatus,
+  showStatus = false,
+  reviewMode = false,
+  onStatusChange
 }) => {
   const navigate = useNavigate();
   const [showReadCard, setShowReadCard] = useState(false);
+  const [status, setStatus] = useState(initialStatus);
 
   const handleNavigate = () => {
     if (!selectionMode) {
       if (isEditable) {
-        navigate(`/edit/${ID}`); // Điều hướng đến trang chỉnh sửa bài viết
+        navigate(`/edit/${ID}`);
       } else {
         navigate(`/post/${ID}`);
       }
@@ -48,49 +55,77 @@ const ContentCard = ({
     }
   };
 
-  // Ensure Tags is an array
+  const handleStatusChange = async (newStatus) => {
+    try {
+      const result = await updatePostStatus(ID, newStatus);
+      if (result.success) {
+        setStatus(newStatus);
+        onStatusChange(ID, newStatus);
+        showSuccessAlert('Success', 'Status updated successfully');
+      } else {
+        console.error('Failed to update status:', result.message);
+        showDeniedAlert('Error', 'Failed to update status');
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+      showDeniedAlert('Error', 'An unexpected error occurred');
+    }
+  };
+
   const tagsArray = Array.isArray(Tags) ? Tags : [];
-  console.log(tagsArray);
+  const statusColor = status === 'APPROVED' ? 'bg-green-500' : status === 'PENDING' ? 'bg-yellow-500' : 'bg-red-500';
+
   return (
     <>
       <div
-        className={`relative flex flex-col p-[8px] rounded-[16px] w-full md:w-[26.7%] min-w-[262px] h-[386px] border-[1px] bg-slate-100 text-[#333] border-gray-400 dark:bg-[#1c1f26] dark:text-[#fff] dark:border-gray-800 hover:border-gray-600 ${isSelected ? 'border-blue-500' : ''}`}
+        className={`relative flex flex-col p-4 rounded-2xl w-full md:w-1/3 min-w-[262px] h-[386px] border bg-slate-100 text-gray-800 border-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 hover:border-gray-600 ${isSelected ? 'border-blue-500' : ''}`}
         onClick={handleSelect}
       >
-        {selectionMode && (
-          <>
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={handleSelect}
-              className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-blue-500 focus:ring-blue-500"
-            />
-            <div className="absolute inset-0 bg-black opacity-25 z-0 rounded-[16px]"></div>
-          </>
-        )}
-        <div className='flex flex-col px-[6px] justify-between items-start flex-1'>
+        <div className='flex flex-col px-2 justify-between items-start flex-1'>
           <div className='flex flex-col w-full'>
-            <div className='flex justify-center items-center size-8'>
-              <img className='rounded-full w-full h-full' src={UserProfileImage || User} alt="" />
+            <div className='flex flex-row items-center gap-4'>
+              <div className='flex justify-center items-center size-8'>
+                <img className='rounded-full w-full h-full' src={UserProfileImage || User} alt="" />
+              </div>
+              {showStatus && !reviewMode && (
+                <div className={`text-sm ${statusColor} text-white font-bold py-1 px-2 rounded`}>
+                  {status}
+                </div>
+              )}
+              {reviewMode && (
+                <form className="max-w-sm mx-auto">
+                  
+                  <select
+                    id="status"
+                    className={`text-sm ${statusColor} text-white font-bold py-1 px-2 rounded`}
+                    value={status}
+                    onChange={(e) => handleStatusChange(e.target.value)}
+                  >
+                    <option className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="APPROVED">Approved</option>
+                    <option className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"value="PENDING">Pending</option>
+                    <option className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"value="REJECTED">Rejected</option>
+                  </select>
+                </form>
+              )}
             </div>
-            <span className='text-2xl text-wrap font-bold text-left w-full max-h-[64px] truncate cursor-pointer' onClick={handleNavigate}>{Title}</span>
+            <span className='text-2xl font-bold text-left w-full max-h-[64px] truncate cursor-pointer' onClick={handleNavigate}>{Title}</span>
           </div>
           <div className='flex flex-col items-start w-full'>
-            <div className='flex flex-row gap-[10px] py-[8px]'>
-                {tagsArray.slice(0, 3).map((tag) => (
-                    <Tag key={tag.id} tagName={`#${tag.name}`} />
-                ))}
-                {tagsArray.length > 3 && (
-                    <Tag key="more-tags" tagName={`+${tagsArray.length - 3} more`} />
-                )}
+            <div className='flex flex-row gap-2 py-2'>
+              {tagsArray.slice(0, 3).map((tag) => (
+                <Tag key={tag.id} tagName={`#${tag.name}`} />
+              ))}
+              {tagsArray.length > 3 && (
+                <Tag key="more-tags" tagName={`+${tagsArray.length - 3} more`} />
+              )}
             </div>
-            <div className='pb-[8px]'>
-                <DatePost Data={Date} />
+            <div className='pb-2'>
+              <DatePost Data={Date} />
             </div>
           </div>
         </div>
-        <div className='w-[100%] cursor-pointer' onClick={handleNavigate}>
-          <img src={Image} alt="" className='rounded-xl object-cover w-[100%] max-h-[160px]' />
+        <div className='w-full cursor-pointer' onClick={handleNavigate}>
+          <img src={Image} alt="" className='rounded-xl object-cover w-full max-h-[160px]' />
         </div>
         <ControlCard vote={ReactionsCount} comment={CommentsCount} postId={ID} />
       </div>

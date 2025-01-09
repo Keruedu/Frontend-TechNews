@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { API_ENDPOINTS } from '../../config';
 
-const useFetchPosts = (initialPage, initialFilters, authorId = null) => {
+const useFetchPosts = (initialPage, initialFilters, authorId = null, status = 'APPROVED', isBookmarked = false) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(initialPage);
@@ -9,8 +9,29 @@ const useFetchPosts = (initialPage, initialFilters, authorId = null) => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
 
-  const fetchPosts = async (page, filters, authorId) => {
+  const fetchPosts = async (page, filters, authorId, status, isBookmarked) => {
     const { sortField, sortType, startDate, endDate, selectedTags, selectedCategories, searchQuery } = filters;
+
+    const requestBody = {
+      startDate,
+      endDate,
+      tagIds: selectedTags.map(tag => tag.value),
+      categoryIds: selectedCategories.map(category => category.value),
+      search: searchQuery,
+      authorId: authorId, // Include authorId in the request body
+      isBookmarked: isBookmarked // Include isBookmarked in the request body
+    };
+
+    if (status !== null) {
+      requestBody.status = Array.isArray(status) ? status : [status]; // Include status in the request body if not null
+    }
+
+    if (isBookmarked) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user._id) {
+        requestBody.bookmarkedByUserId = user._id; // Include bookmarkedByUserId in the request body
+      }
+    }
 
     try {
       const response = await fetch(`${API_ENDPOINTS.SEARCH_POSTS}?size=9&page=${page}&sortField=${sortField}&sortType=${sortType}`, {
@@ -18,14 +39,7 @@ const useFetchPosts = (initialPage, initialFilters, authorId = null) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          startDate,
-          endDate,
-          tagIds: selectedTags.map(tag => tag.value),
-          categoryIds: selectedCategories.map(category => category.value),
-          search: searchQuery,
-          authorId: authorId // Thêm authorId vào body của request
-        })
+        body: JSON.stringify(requestBody)
       });
 
       if (!response.ok) {
@@ -52,8 +66,8 @@ const useFetchPosts = (initialPage, initialFilters, authorId = null) => {
   };
 
   useEffect(() => {
-    fetchPosts(page, filters, authorId);
-  }, [page, filters, authorId]);
+    fetchPosts(page, filters, authorId, status, isBookmarked);
+  }, [page, filters, authorId, status, isBookmarked]);
 
   const loadMore = () => {
     setLoadingMore(true);

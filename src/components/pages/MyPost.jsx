@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ListContentCard from '../body/listcontentcard.jsx';
+import StatusFilter from '../form/StatusFilter';
 import { API_ENDPOINTS } from '../../config';
 import { showSuccessAlert, showDeniedAlert } from '../../utils/alert';
 
@@ -8,6 +9,7 @@ const MyPost = () => {
   const [selectedPosts, setSelectedPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0); // Thêm state để trigger re-fetch
+  const [statusFilter, setStatusFilter] = useState(['ALL']); // Thêm state để lưu trữ bộ lọc trạng thái
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -56,6 +58,11 @@ const MyPost = () => {
     }
   };
 
+  const handleStatusFilterChange = (newStatusFilter) => {
+    setStatusFilter(newStatusFilter);
+    setRefreshKey(prevKey => prevKey + 1); // Trigger re-fetch
+  };
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -64,7 +71,8 @@ const MyPost = () => {
     <div className='flex flex-col w-[84.2%] p-4'>
       <header className='flex justify-between items-center mb-4'>
         <h1 className='text-2xl font-bold'>My Posts</h1>
-        <div className='flex items-center'>
+        <div className='flex items-center gap-4'>
+          <StatusFilter value={statusFilter} onChange={handleStatusFilterChange} />
           {selectionMode && selectedPosts.length > 0 && (
             <button
               onClick={handleDeleteSelectedPosts}
@@ -89,6 +97,8 @@ const MyPost = () => {
         selectedPosts={selectedPosts}
         authorId={user._id} // Truyền authorId của người dùng đang đăng nhập
         isEditable={true} // Thêm prop để xác định có thể chỉnh sửa bài viết
+        status={statusFilter.includes('ALL') ? null : statusFilter} // Lọc theo status
+        showStatus={true} // Hiển thị status của bài viết
       />
     </div>
   );

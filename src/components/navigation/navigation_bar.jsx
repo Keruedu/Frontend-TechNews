@@ -20,12 +20,12 @@ const NavigantionBar = () => {
                     <NavTag Icon={faFire} Tag='My Feed' to="/" />
                     <NavTag Icon={faMessage} Tag='Custom Feed' to="/customfeed" />
                 </ul>
-                {user && user.role === 'ADMIN' && (
+                {user && (user.role === 'ADMIN' || user.role === 'MANAGER') && (
                     <ListNavTag Name='Admin' Array={[
                         { tag: 'Dashboard', icon: faTachometerAlt, to: '/admin/dashboard' },
                         { tag: 'Review Posts', icon: faClipboardCheck, to: '/admin/review-posts' },
                         { tag: 'Manage Categories', icon: faFolderOpen, to: '/admin/manage-categories' },
-                        { tag: 'Manage Accounts', icon: faUserShield, to: '/admin/manage-accounts' }
+                        ...(user.role === 'ADMIN' ? [{ tag: 'Manage Accounts', icon: faUserShield, to: '/admin/manage-accounts' }] : [])
                     ]} />
                 )}
                 <ListNavTag Name='Posts' Array={[{ tag: 'My Post', icon: faUsers, to: '/mypost' }, { tag: 'Public Post', icon: faGlobe, to: '/publicpost' }]} />

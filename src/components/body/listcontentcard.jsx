@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ContentCard from '../card/contentcard.jsx';
 import Filter from '../form/Filter.jsx';
 import useFetchPosts from '../hook/useFetchPosts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const ListContentCard = ({ width = 'w-[84.2%]', selectionMode = false, onPostSelect, selectedPosts = [], authorId = null, isEditable = false }) => {
+const ListContentCard = ({ width = 'w-[84.2%]', selectionMode = false, onPostSelect, selectedPosts = [], authorId = null, isEditable = false, status = 'APPROVED', showStatus = false, reviewMode = false, isBookmarked = false }) => {
   const { data, loading, hasMore, loadingMore, loadMore, applyFilters } = useFetchPosts(1, {
     sortField: 'createdAt',
     sortType: 'desc',
@@ -14,8 +14,17 @@ const ListContentCard = ({ width = 'w-[84.2%]', selectionMode = false, onPostSel
     selectedTags: [],
     selectedCategories: [],
     searchQuery: '',
-  }, authorId);
+  }, authorId, status, isBookmarked);
 
+  const [posts, setPosts] = useState(data);
+
+  const handleStatusChange = (postId, newStatus) => {
+    setPosts((prevData) =>
+      prevData.map((post) =>
+        post._id === postId ? { ...post, status: newStatus } : post
+      )
+    );
+  };
   return (
     <div className={`flex flex-col px-[40px] py-[20px] gap-[40px] ${width}`}>
       <Filter onApplyFilters={applyFilters} />
@@ -40,7 +49,11 @@ const ListContentCard = ({ width = 'w-[84.2%]', selectionMode = false, onPostSel
             selectionMode={selectionMode}
             onPostSelect={onPostSelect}
             isSelected={selectedPosts.includes(da._id)}
-            isEditable={isEditable} // Truyền prop isEditable
+            isEditable={isEditable}
+            Status={da.status} // Pass the status of the post
+            showStatus={showStatus} // Pass the showStatus prop
+            reviewMode={reviewMode}
+            onStatusChange={handleStatusChange} // Truyền callback để cập nhật trạng thái
           />
         ))}
       </div>
