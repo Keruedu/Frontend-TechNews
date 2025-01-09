@@ -20,6 +20,7 @@ import ManageCategories from '../pages/ManageCategories.jsx';
 import ManageAccounts from '../pages/ManageAccounts.jsx';
 import MyPost from '../pages/MyPost.jsx';
 import EditPost from '../pages/EditPost.jsx';
+import AccountDetails from '../pages/AccountDetails';
 
 const AppRouter = () => {
     const [user, setUser] = useState(null);
@@ -65,6 +66,7 @@ const AppRouter = () => {
                 <Route path="/admin/review-posts" element={<ProtectedRoute><Body content={<ReviewPosts />} /></ProtectedRoute>} />
                 <Route path="/admin/manage-categories" element={<ProtectedRoute><Body content={<ManageCategories />} /></ProtectedRoute>} />
                 <Route path="/admin/manage-accounts" element={<ProtectedRoute><Body content={<ManageAccounts />} /></ProtectedRoute>} />
+                <Route path="/admin/accounts/:userId" element={<AccountDetails />} />
             </Routes>
         </Router>
     );

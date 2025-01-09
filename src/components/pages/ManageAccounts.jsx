@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const ManageAccounts = () => {
+  const navigate = useNavigate();
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -78,6 +80,12 @@ const ManageAccounts = () => {
     setSelectedAccount(selectedAccount === account ? null : account);
   };
 
+  // Xử lý chuyển hướng đến trang chi tiết
+  const handleViewDetails = (userId) => {
+    navigate(`/admin/accounts/${userId}`);
+    setSelectedAccount(null); // Đóng dropdown
+  };
+
   // Xử lý cấm/bỏ cấm tài khoản
   const handleToggleBan = async (account) => {
     try {
@@ -101,10 +109,10 @@ const ManageAccounts = () => {
         alert(response.data.message);
       }
     } catch (error) {
-      console.error('Có lỗi xảy ra:', error);
-      alert(error.response?.data?.message || 'Có lỗi xảy ra khi thực hiện thao tác');
+      console.error('Error:', error);
+      alert(error.response?.data?.message || 'Error performing action');
     }
-    setSelectedAccount(null);
+    setSelectedAccount(null); // Đóng dropdown
   };
 
   // Xử lý thay đổi giá trị input
@@ -206,9 +214,26 @@ const ManageAccounts = () => {
                       <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-700">
                         <div className="py-1">
                           <button 
+                            onClick={() => handleViewDetails(account._id)}
                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
                             View Details
+                          </button>
+                          <button 
+                            onClick={() => handleToggleBan(account)}
+                            className={`block w-full text-left px-4 py-2 text-sm ${
+                              account.isBanned 
+                                ? 'text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20' 
+                                : 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20'
+                            }`}
+                          >
+                            {account.isBanned ? 'Unban Account' : 'Ban Account'}
+                          </button>
+                          <button 
+                            onClick={() => handleResetPassword(account._id)}
+                            className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                          >
+                            Reset Password
                           </button>
                         </div>
                       </div>
