@@ -20,6 +20,7 @@ import ManageCategories from '../pages/ManageCategories.jsx';
 import ManageAccounts from '../pages/ManageAccounts.jsx';
 import MyPost from '../pages/MyPost.jsx';
 import EditPost from '../pages/EditPost.jsx'; // Import EditPost component
+import AccountDetails from '../pages/AccountDetails.jsx';
 
 const AppRouter = () => {
     const [user, setUser] = useState(null);
@@ -72,6 +73,7 @@ const AppRouter = () => {
                 <Route path="/admin/review-posts" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<ReviewPosts />} /></ProtectedRoute>} />
                 <Route path="/admin/manage-categories" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<ManageCategories />} /></ProtectedRoute>} />
                 <Route path="/admin/manage-accounts" element={<AdminProtectedRoute><Body content={<ManageAccounts />} /></AdminProtectedRoute>} />
+                <Route path="/admin/accounts/:userId" element={<ProtectedRoute><Body content={<AccountDetails />} /></ProtectedRoute>} />
                 <Route path="/edit/:id" element={<Body content={<EditPost />} />} /> {/* Add route for editing posts */}
             </Routes>
         </Router>
