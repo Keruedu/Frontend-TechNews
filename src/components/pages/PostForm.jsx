@@ -115,7 +115,7 @@ const PostForm = ({ postId, initialData, onSubmit }) => {
                                 id='title'
                                 maxLength={maxTitleLength}
                                 size='1'
-                                className='self-stretch text-ellipsis dark:group-hover:placeholder-white focus:text-black dark:focus:text-white dark:focus:placeholder-white  min-w-0 bg-transparent focus:outline-none w-full h-full px-2'
+                                className='self-stretch text-ellipsis dark:group-hover:placeholder-white focus:text-black dark:focus:text-white dark:focus:placeholder-white min-w-0 bg-transparent focus:outline-none w-full h-full px-2'
                                 required
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
