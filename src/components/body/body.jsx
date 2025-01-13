@@ -16,7 +16,7 @@ const Body = ({content = <ListContentCard/>}) => {
     const navItems = [
         { tag: 'My Feed', icon: faFire, to: '/' },
             ...(user && (user.role === 'ADMIN' || user.role === 'MANAGER') ? [
-            ...(user.role === 'ADMIN' ? [{ tag: 'Dashboard', icon: faTachometerAlt, to: '/admin/dashboard' }] : []),
+            ...(user.role === 'ADMIN' ? [{ tag: 'Dashboard', icon: faTachometerAlt, to: '/admin/statistics' }] : []),
             { tag: 'Review Posts', icon: faClipboardCheck, to: '/admin/review-posts' },
             { tag: 'Manage Categories', icon: faFolderOpen, to: '/admin/manage-categories' },
             ...(user.role === 'ADMIN' ? [{ tag: 'Manage Accounts', icon: faUserShield, to: '/admin/manage-accounts' }] : [])

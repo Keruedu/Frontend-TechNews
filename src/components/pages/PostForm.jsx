@@ -45,14 +45,10 @@ const PostForm = ({ postId, initialData, onSubmit }) => {
     const handleThumbnailChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setThumbnail(reader.result);
-            };
-            reader.readAsDataURL(file);
+            setThumbnail(file);
         }
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
@@ -62,7 +58,7 @@ const PostForm = ({ postId, initialData, onSubmit }) => {
         formData.append('title', title);
         formData.append('content', content);
         formData.append('categoryId', selectedCategory);
-        formData.append('tags', JSON.stringify(tags.map(tag => tag.name))); // Chuỗi JSON cho danh sách tags
+        formData.append('tags', JSON.stringify(tags.map(tag => tag.name)));// Chuỗi JSON cho danh sách tags
         if (thumbnail) {
             formData.append('thumbnail', thumbnail); // File ảnh
         }
@@ -98,9 +94,14 @@ const PostForm = ({ postId, initialData, onSubmit }) => {
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                     <div className='relative '>
                         <label className='group w-[240px] h-[160px] relative flex items-center justify-center overflow-hidden border border-gray-300 rounded-xl bg-gray-100 text-gray-500 cursor-pointer'>
-                            <input type='file' name='thumbnail' accept='image/png,image/jpeg' className='hidden' onChange={handleThumbnailChange} />
+                        <input type='file' name='thumbnail' accept='image/png,image/jpeg' className='hidden' onChange={handleThumbnailChange} />
+                        <input type='file' name='thumbnail' accept='image/png,image/jpeg' className='hidden' onChange={handleThumbnailChange} />
                             {thumbnail ? (
-                                <img src={thumbnail} alt='Thumbnail' className='w-full h-full object-cover' />
+                                typeof thumbnail === 'string' ? (
+                                    <img src={thumbnail} alt='Thumbnail' className='w-full h-full object-cover' />
+                                ) : (
+                                    <img src={URL.createObjectURL(thumbnail)} alt='Thumbnail' className='w-full h-full object-cover' />
+                                )
                             ) : (
                                 <>
                                     <svg width='1em' height='1em' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' className='w-5 h-5 pointer-events-none'>
