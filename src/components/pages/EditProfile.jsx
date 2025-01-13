@@ -10,11 +10,15 @@ const EditProfile = () => {
   });
   const [loading, setLoading] = useState(true);
   const [avatarFile, setAvatarFile] = useState(null);
+  const [isResetPasswordModalVisible, setResetPasswordModalVisible] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const token = localStorage.getItem('token');
 
   const fetchUserData = async () => {
-     try {
+    try {
       const response = await fetch(`http://localhost:4000/api/users/${currentUser._id}`);
       const result = await response.json();
       if (result.success) {
@@ -127,6 +131,37 @@ const EditProfile = () => {
     }
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmNewPassword) {
+      console.error('New passwords do not match');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:4000/api/users/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        console.log('Password reset successfully');
+        setResetPasswordModalVisible(false);
+      } else {
+        console.error('Error resetting password:', result.message);
+      }
+    } catch (error) {
+      console.error('Error resetting password:', error);
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -162,9 +197,35 @@ const EditProfile = () => {
             </div>
             <div className="flex flex-row gap-[10px]">
               <button type="submit" className="px-4 py-2 bg-blue-500 dark:bg-blue-700 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-800 transition ease-in-out duration-150">Save Changes</button>
-              <button type="button" className="px-4 py-2 bg-red-500 dark:bg-red-700 text-white rounded-md hover:bg-red-600 dark:hover:bg-red-800 transition ease-in-out duration-150">Reset Password</button>
+              <button type="button" className="px-4 py-2 bg-red-500 dark:bg-red-700 text-white rounded-md hover:bg-red-600 dark:hover:bg-red-800 transition ease-in-out duration-150" onClick={() => setResetPasswordModalVisible(true)}>Reset Password</button>
             </div>
           </form>
+        </div>
+      )}
+
+      {isResetPasswordModalVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg">
+            <h3 className="text-xl font-semibold mb-4">Reset Password</h3>
+            <form onSubmit={handleResetPassword}>
+              <div className="mb-4">
+                <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Password</label>
+                <input type="password" name="currentPassword" id="currentPassword" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">New Password</label>
+                <input type="password" name="newPassword" id="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm New Password</label>
+                <input type="password" name="confirmNewPassword" id="confirmNewPassword" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+              </div>
+              <div className="flex justify-end gap-3">
+                <button type="button" onClick={() => setResetPasswordModalVisible(false)} className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">Reset Password</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </>
