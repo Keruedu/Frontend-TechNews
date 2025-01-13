@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavTag from "./nav_tag";
 import ListNavTag from "./listnav_tag";
-import { faFire, faMessage, faTag, faGlobe, faUsers, faLink, faHistory, faFile, faCommentDots, faComments, faTachometerAlt, faClipboardCheck, faFolderOpen, faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { faFire, faMessage, faTag, faGlobe, faUsers, faLink, faHistory, faFile, faCommentDots, faComments, faTachometerAlt, faClipboardCheck, faFolderOpen, faUserShield, faChartLine } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import './nav.css'
 
@@ -24,7 +24,10 @@ const NavigantionBar = () => {
                     <ListNavTag Name='Admin' Array={[
                         { tag: 'Review Posts', icon: faClipboardCheck, to: '/admin/review-posts' },
                         { tag: 'Manage Categories', icon: faFolderOpen, to: '/admin/manage-categories' },
-                        ...(user.role === 'ADMIN' ? [{ tag: 'Manage Accounts', icon: faUserShield, to: '/admin/manage-accounts' }] : [])
+                        ...(user.role === 'ADMIN' ? [
+                            { tag: 'Manage Accounts', icon: faUserShield, to: '/admin/manage-accounts' },
+                            { tag: 'Statistics', icon: faChartLine, to: '/admin/statistics' }
+                        ] : [])
                     ]} />
                 )}
                 <ListNavTag Name='Posts' Array={[{ tag: 'My Post', icon: faUsers, to: '/mypost' }]} />

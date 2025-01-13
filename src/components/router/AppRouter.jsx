@@ -21,6 +21,7 @@ import ManageAccounts from '../pages/ManageAccounts.jsx';
 import MyPost from '../pages/MyPost.jsx';
 import EditPost from '../pages/EditPost.jsx';
 import AccountDetails from '../pages/AccountDetails.jsx';
+import Statistics from '../pages/Statistics.jsx';
 
 const AppRouter = () => {
     const [user, setUser] = useState(null);
@@ -73,6 +74,7 @@ const AppRouter = () => {
                 <Route path="/admin/review-posts" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<ReviewPosts />} /></ProtectedRoute>} />
                 <Route path="/admin/manage-categories" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<ManageCategories />} /></ProtectedRoute>} />
                 <Route path="/admin/manage-accounts" element={<AdminProtectedRoute><Body content={<ManageAccounts />} /></AdminProtectedRoute>} />
+                <Route path="/admin/statistics" element={<AdminProtectedRoute><Body content={<Statistics />} /></AdminProtectedRoute>} />
                 <Route path="/admin/accounts/:userId" element={<ProtectedRoute><Body content={<AccountDetails />} /></ProtectedRoute>} />
                 <Route path="/edit/:id" element={<Body content={<EditPost />} />} /> {/* Add route for editing posts */}
             </Routes>
