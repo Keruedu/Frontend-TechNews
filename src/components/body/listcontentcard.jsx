@@ -5,7 +5,7 @@ import useFetchPosts from '../hook/useFetchPosts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const ListContentCard = ({ width = 'w-[84.2%]', selectionMode = false, onPostSelect, selectedPosts = [], authorId = null, isEditable = false, status = 'APPROVED', showStatus = false, reviewMode = false, isBookmarked = false }) => {
+const ListContentCard = ({ width = 'md:w-[84.2%]', selectionMode = false, onPostSelect, selectedPosts = [], authorId = null, isEditable = false, status = 'APPROVED', showStatus = false, reviewMode = false, isBookmarked = false }) => {
   const { data, loading, hasMore, loadingMore, loadMore, applyFilters } = useFetchPosts(1, {
     sortField: 'createdAt',
     sortType: 'desc',
@@ -26,7 +26,7 @@ const ListContentCard = ({ width = 'w-[84.2%]', selectionMode = false, onPostSel
     );
   };
   return (
-    <div className={`flex flex-col px-[40px] py-[20px] gap-[40px] ${width}`}>
+    <div className={`flex flex-col px-[40px] py-[20px] gap-[40px] w-full ${width}`}>
       <Filter onApplyFilters={applyFilters} />
       <div className='flex flex-row flex-wrap justify-center items-center gap-[30px] w-[100%]'>
         {data.map((da, index) => (
