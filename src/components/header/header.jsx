@@ -3,18 +3,22 @@ import Techlogo from '../../assets/logo.svg';
 import { Link } from 'react-router-dom';
 import SquareButton from '../button/squarebutton.jsx';
 import ProfileButton from '../button/profilebutton.jsx';
-import ProfileCard from '../card/profilecard.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell } from '@fortawesome/free-regular-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faPlus, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import ListNavTag from '../navigation/listnav_tag.jsx';
 
-const Header = () => {
+const Header = ({ navItems }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
         setIsLoggedIn(loggedInStatus);
     }, []);
+
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
 
     return (
         <header className='flex flex-row items-center justify-between sticky top-0 z-50 px-[16px] py-[12px] border-b-[1px] bg-white text-[#333] dark:bg-[#0e1217] dark:text-[#fff] border-gray-700'>
@@ -40,6 +44,25 @@ const Header = () => {
                         <Link to="/signup">
                             <button className='bg-green-500 text-white px-4 py-2 rounded'>Sign Up</button>
                         </Link>
+                    </div>
+                )}
+                <div className='md:hidden'>
+                    <button onClick={toggleMenu} className="p-2 text-gray-600 dark:text-white">
+                        <FontAwesomeIcon icon={isOpen ? faTimes : faBars} />
+                    </button>
+                </div>
+                {isOpen && (
+                    <div className="absolute top-full left-0 w-full bg-white dark:bg-gray-800 shadow-lg z-50 md:hidden">
+                        <ul className="flex flex-col p-4">
+                            {navItems.map((item) => (
+                                <li key={item.tag} className="py-2 px-3">
+                                    <Link to={item.to} className="text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                                        <FontAwesomeIcon icon={item.icon} className="mr-2" />
+                                        {item.tag}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
             </div>

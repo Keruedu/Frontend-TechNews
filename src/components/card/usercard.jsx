@@ -44,9 +44,9 @@ const UserCard = ({ Image, Name, Username, Organization, userId }) => {
 
     return (
         <button 
-            className='flex flex-col md:flex-row p-[12px] justify-between items-center text-[16px] text-gray-500 dark:text-white border-[1px] border-gray-400 dark:border-gray-700 rounded-[16px] w-full md:w-auto' 
+            className='flex flex-row p-[8px] justify-between items-center gap-3 text-[16px] text-gray-500 dark:text-white border-[1px] border-gray-200 rounded-[16px] w-full md:w-auto' 
         >
-            <div className='flex flex-col md:flex-row justify-center items-center gap-[10px]'
+            <div className='flex flex-row justify-center items-center gap-[10px]'
                 onClick={handleNavigate}>
                 <button className='w-[50px] h-[50px] md:w-[40px] md:h-[40px] rounded-full flex justify-center items-center'>
                     <img className='rounded-full w-full h-full object-cover' src={Image || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt='User Avatar' />

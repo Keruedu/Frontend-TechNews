@@ -56,20 +56,24 @@ const PostForm = ({ postId, initialData, onSubmit }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
+    
+        // Tạo FormData
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('categoryId', selectedCategory);
+        formData.append('tags', JSON.stringify(tags.map(tag => tag.name))); // Chuỗi JSON cho danh sách tags
+        if (thumbnail) {
+            formData.append('thumbnail', thumbnail); // File ảnh
+        }
+    
         try {
             const response = await fetch(postId ? `${API_ENDPOINTS.POSTS}/${postId}` : API_ENDPOINTS.POSTS, {
                 method: postId ? 'PUT' : 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${token}` // Không thêm Content-Type
                 },
-                body: JSON.stringify({
-                    title,
-                    content,
-                    tags: tags.map(tag => tag.name),
-                    categoryId: selectedCategory,
-                    thumbnail
-                })
+                body: formData
             });
             const result = await response.json();
             if (result.success) {
