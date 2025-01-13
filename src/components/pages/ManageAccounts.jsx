@@ -151,6 +151,36 @@ const ManageAccounts = () => {
     setInputPage(currentPage.toString());
   }, [currentPage]);
 
+  // Thêm hàm xử lý toggle role
+  const handleToggleRole = async (account) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        `http://localhost:4000/api/users/${account._id}/toggle-role`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.data.success) {
+        // Cập nhật state accounts với role mới
+        setAccounts(accounts.map(acc => 
+          acc._id === account._id 
+            ? { ...acc, role: response.data.user.role }
+            : acc
+        ));
+        setSelectedAccount(null); // Đóng dropdown
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error toggling role:', error);
+      alert(error.response?.data?.message || 'Error updating role');
+    }
+  };
+
   if (loading) {
     return (
       <div className="ml-[15.8%] min-h-screen w-[84.2%] bg-white dark:bg-[#1E293B] flex items-center justify-center">
@@ -224,7 +254,10 @@ const ManageAccounts = () => {
                       <FontAwesomeIcon icon={faEllipsisVertical} />
                     </button>
                     {selectedAccount === account && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-700">
+                      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700"
+                        style={{
+                          zIndex: 1000
+                        }}>
                         <div className="py-1">
                           <button 
                             onClick={() => handleViewDetails(account._id)}
@@ -242,12 +275,14 @@ const ManageAccounts = () => {
                           >
                             {account.isBanned ? 'Unban Account' : 'Ban Account'}
                           </button>
-                          <button 
-                            onClick={() => handleResetPassword(account._id)}
-                            className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
-                          >
-                            Reset Password
-                          </button>
+                          {account.role !== 'ADMIN' && (
+                            <button 
+                              onClick={() => handleToggleRole(account)}
+                              className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                            >
+                              {account.role === 'USER' ? 'Promote to Manager' : 'Demote to User'}
+                            </button>
+                          )}
                         </div>
                       </div>
                     )}
