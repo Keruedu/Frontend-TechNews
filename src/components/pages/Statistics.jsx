@@ -30,6 +30,7 @@ const Statistics = () => {
     totalUsers: 0,
     totalPosts: 0,
     totalCategories: 0,
+    totalTags: 0,
     userStats: {
       admin: 0,
       manager: 0,
@@ -202,6 +203,7 @@ const Statistics = () => {
               <p className="dark:text-gray-300">Total Users: {stats.totalUsers}</p>
               <p className="dark:text-gray-300">Total Posts: {stats.totalPosts}</p>
               <p className="dark:text-gray-300">Total Categories: {stats.totalCategories}</p>
+              <p className="dark:text-gray-300">Total Tags: {stats.totalTags}</p>
             </div>
           </div>
 
