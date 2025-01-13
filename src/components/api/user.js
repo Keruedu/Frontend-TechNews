@@ -33,8 +33,22 @@ export const followUser = async (userId) => {
       }
     });
     if (response.ok) {
-      const result = await response.json();
-      return { success: true, message: result.message };
+      const currentUser = JSON.parse(localStorage.getItem('user'));
+      // Create a notification for the followed user
+      await fetch(`${API_ENDPOINTS.NOTIFICATIONS}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: userId,
+          message: `User ${currentUser.username} started following you.`,
+          type: 'FOLLOW',
+          url: `/user/${currentUser._id}` // Set the URL to the user's profile
+        })
+      });
+      return { success: true };
     } else {
       return { success: false, message: response.statusText };
     }

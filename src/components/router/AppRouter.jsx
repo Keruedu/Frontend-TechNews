@@ -22,6 +22,10 @@ import MyPost from '../pages/MyPost.jsx';
 import EditPost from '../pages/EditPost.jsx';
 import AccountDetails from '../pages/AccountDetails.jsx';
 import Statistics from '../pages/Statistics.jsx';
+import TagPage from '../pages/TagPage';
+import CategoryPage from '../pages/CategoryPage';
+import Notifications from '../pages/Notifications.jsx';
+
 
 const AppRouter = () => {
     const [user, setUser] = useState(null);
@@ -55,13 +59,13 @@ const AppRouter = () => {
                 <Route path="/publicpost" element={<Body content={<div>Public Post Content</div>} />} />
                 <Route path="/explore" element={<Body content={<div>Explore Content</div>} />} />
                 <Route path="/discussion" element={<Body content={<div>Discussion Content</div>} />} />
-                <Route path="/tag" element={<Body content={<div>Tag Content</div>} />} />
+                <Route path="/categories" element={<Body content={<CategoryPage />}/>} />
+                <Route path="/tags" element={<Body content={<TagPage />}/>} />
                 <Route path="/bookmarks" element={<Body content={<ListContentCard isBookmarked={true} />} />} />
                 <Route path="/history" element={<Body content={<div>History Content</div>} />} />
                 <Route path="/docs" element={<Body content={<div>Docs Content</div>} />} />
                 <Route path="/changelog" element={<Body content={<div>Changelog Content</div>} />} />
                 <Route path="/feedback" element={<Body content={<div>Feedback Content</div>} />} />
-                <Route path="/category" element={<Body content={<div>Category Content</div>} />} />
                 <Route path="/post/:id" element={<Body content={<Post />} />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/login" element={<Login />} />
@@ -77,6 +81,8 @@ const AppRouter = () => {
                 <Route path="/admin/statistics" element={<AdminProtectedRoute><Body content={<Statistics />} /></AdminProtectedRoute>} />
                 <Route path="/admin/accounts/:userId" element={<AdminProtectedRoute><Body content={<AccountDetails />} /></AdminProtectedRoute>} />
                 <Route path="/edit/:id" element={<Body content={<EditPost />} />} /> {/* Add route for editing posts */}
+                <Route path="/user/:id" element={<User />} />
+                <Route path="/notifications" element={<Body content={<Notifications />} />}/>
             </Routes>
         </Router>
     );
