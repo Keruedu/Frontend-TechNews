@@ -12,8 +12,7 @@ const NavTag = ({ Icon, Tag, to, children }) => {
                 <div className='flex justify-center items-center size-5'>
                     <FontAwesomeIcon icon={Icon} className='text-[16px]' />
                 </div>
-                <span>{Tag}</span>
-                {children}
+                <span className='hidden lg:block'>{Tag}</span>
             </Link>
         </li>
     );

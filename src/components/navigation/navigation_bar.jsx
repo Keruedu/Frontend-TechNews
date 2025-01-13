@@ -42,6 +42,7 @@ const NavigationBar = () => {
     const navItems = [
         { tag: 'My Feed', icon: faFire, to: '/' },
         ...(user && (user.role === 'ADMIN' || user.role === 'MANAGER') ? [
+            ...(user.role === 'ADMIN' ? [{ tag: 'Dashboard', icon: faTachometerAlt, to: '/admin/dashboard' }] : []),
             { tag: 'Review Posts', icon: faClipboardCheck, to: '/admin/review-posts' },
             { tag: 'Manage Categories', icon: faFolderOpen, to: '/admin/manage-categories' },
             ...(user.role === 'ADMIN' ? [{ tag: 'Manage Accounts', icon: faUserShield, to: '/admin/manage-accounts' }] : [])
@@ -56,7 +57,7 @@ const NavigationBar = () => {
     ];
 
     return (
-        <aside className={`fixed left-0 z-49 h-full border-r border-gray-700 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+        <aside className={`fixed left-0 z-49 w-fit h-full border-r border-gray-700 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
             <div className='flex flex-col h-full pt-8 pb-4 text-gray-600 dark:text-[#a8b3cf] text-[14px] gap-4'>
                 {/* <HamburgerMenu navItems={navItems} isOpen={isMenuOpen} toggleMenu={toggleMenu} /> */}
                 <ul className={`flex flex-col gap-4 ${isMenuOpen ? 'block' : 'hidden'} md:flex`}>
@@ -70,7 +71,7 @@ const NavigationBar = () => {
                         ]} />
                     )}
                     <ListNavTag Name='Posts' Array={[{ tag: 'My Post', icon: faUsers, to: '/mypost' }]} />
-                    <ListNavTag Name='Tags' Array={[{ tag: 'Tag', icon: faTag, to: '/tag' }, { tag: 'Category', icon: faFolderOpen, to: '/category' }]} />
+                    <ListNavTag Name='Tags' Array={[{ tag: 'Tags', icon: faTag, to: '/tags' }, { tag: 'Categories', icon: faFolderOpen, to: '/categories' }]} />
                     <ListNavTag Name='Activity' Array={[{ tag: 'Bookmarks', icon: faBookmark, to: '/bookmarks' }, { tag: 'History', icon: faHistory, to: '/history' }]} />
                     <ListNavTag Name='' Array={[{ tag: 'Docs', icon: faFile, to: '/docs' }, { tag: 'Changelog', icon: faLink, to: '/changelog' }]} />
                 </ul>
