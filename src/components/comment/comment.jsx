@@ -14,10 +14,10 @@ const Comment = ({ Name, Image, Upvote, Date, Content }) => {
                 </div>
             </div>
             <span>{Content}</span>
-            <div className='flex flex-row justify-between items-center mt-[8px]'>
+            {/* <div className='flex flex-row justify-between items-center mt-[8px]'>
                 <ControlCardCommmet />
                 <button className='text-gray-700 dark:text-gray-400'>{Upvote} upvotes</button>
-            </div>
+            </div> */}
         </div>
     );
 };
