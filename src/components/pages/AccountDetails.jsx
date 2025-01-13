@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import defaultAvatar from '../../assets/avatar-default.svg';
 
 const AccountDetails = () => {
   const { userId } = useParams();
@@ -74,9 +75,13 @@ const AccountDetails = () => {
                     <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Avatar</label>
                     <div className="p-2">
                       <img 
-                        src={user.profile?.avatar || '/default-avatar.png'} 
+                        src={user.profile?.avatar || defaultAvatar} 
                         alt="User avatar"
                         className="w-20 h-20 rounded-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = defaultAvatar;
+                        }}
                       />
                     </div>
                   </div>

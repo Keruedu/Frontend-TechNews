@@ -75,7 +75,7 @@ const AppRouter = () => {
                 <Route path="/admin/manage-categories" element={<ProtectedRoute roles={['ADMIN', 'MANAGER']}><Body content={<ManageCategories />} /></ProtectedRoute>} />
                 <Route path="/admin/manage-accounts" element={<AdminProtectedRoute><Body content={<ManageAccounts />} /></AdminProtectedRoute>} />
                 <Route path="/admin/statistics" element={<AdminProtectedRoute><Body content={<Statistics />} /></AdminProtectedRoute>} />
-                <Route path="/admin/accounts/:userId" element={<ProtectedRoute><Body content={<AccountDetails />} /></ProtectedRoute>} />
+                <Route path="/admin/accounts/:userId" element={<AdminProtectedRoute><Body content={<AccountDetails />} /></AdminProtectedRoute>} />
                 <Route path="/edit/:id" element={<Body content={<EditPost />} />} /> {/* Add route for editing posts */}
             </Routes>
         </Router>
