@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfilePost from '../card/profilepost';
+import { API_ENDPOINTS } from '../../config';
 
 const Profile = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [totalViews, setTotalViews] = useState(0);
+    const [totalUpvotes, setTotalUpvotes] = useState(0);
+    const [followersCount, setFollowersCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user'));
+
     const fetchPosts = async () => {
         try {
             if (!user) {
@@ -14,7 +20,7 @@ const Profile = () => {
                 return;
             }
 
-            const response = await fetch('http://localhost:4000/api/posts/search', {
+            const response = await fetch(API_ENDPOINTS.SEARCH_POSTS, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -30,6 +36,12 @@ const Profile = () => {
                     author: user.username
                 }));
                 setPosts(postsWithAuthorInfo);
+
+                // Calculate total views and upvotes
+                const views = postsWithAuthorInfo.reduce((acc, post) => acc + post.views, 0);
+                const upvotes = postsWithAuthorInfo.reduce((acc, post) => acc + post.upvotesCount, 0);
+                setTotalViews(views);
+                setTotalUpvotes(upvotes);
             } else {
                 console.error('Error fetching posts:', result.message);
             }
@@ -40,9 +52,31 @@ const Profile = () => {
         }
     };
 
-    useEffect(() => {
+    const fetchUserDetails = async () => {
+        try {
+            const response = await fetch(`${API_ENDPOINTS.USERS}/${user._id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
+            const result = await response.json();
+            if (result.success) {
+                setFollowersCount(result.data.followers.length);
+                setFollowingCount(result.data.following.length);
+            } else {
+                console.error('Error fetching user details:', result.message);
+            }
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    };
+
+    useEffect(() => {
         fetchPosts();
+        fetchUserDetails();
     }, []);
 
     return (
@@ -114,25 +148,21 @@ const Profile = () => {
                                 <div class="flex flex-col gap-3">
                                     <div class="flex flex-row gap-2">
                                         <div class="flex items-center gap-1">
-                                            <b class="text-text-primary typo-subhead">0</b>
+                                            <b class="text-text-primary typo-subhead">{followersCount}</b>
                                             <span class="capitalize">Followers</span>
                                         </div>
                                         <div class="flex items-center gap-1">
-                                            <b class="text-text-primary typo-subhead">0</b>
+                                            <b class="text-text-primary typo-subhead">{followingCount}</b>
                                             <span class="capitalize">Following</span>
                                         </div>
                                     </div>
                                     <div class="flex flex-row gap-2">
                                         <div class="flex items-center gap-1">
-                                            <b class="text-text-primary typo-subhead">10</b>
-                                            <span class="capitalize">Reputation</span>
-                                        </div>
-                                        <div class="flex items-center gap-1">
-                                            <b class="text-text-primary typo-subhead">2</b>
+                                            <b class="text-text-primary typo-subhead">{totalViews}</b>
                                             <span class="capitalize">Views</span>
                                         </div>
                                         <div class="flex items-center gap-1">
-                                            <b class="text-text-primary typo-subhead">0</b>
+                                            <b class="text-text-primary typo-subhead">{totalUpvotes}</b>
                                             <span class="capitalize">Upvotes</span>
                                         </div>
                                     </div>

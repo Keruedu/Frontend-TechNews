@@ -23,6 +23,7 @@ import EditPost from '../pages/EditPost.jsx';
 import AccountDetails from '../pages/AccountDetails.jsx';
 import TagPage from '../pages/TagPage';
 import CategoryPage from '../pages/CategoryPage';
+import Notifications from '../pages/Notifications.jsx';
 
 const AppRouter = () => {
     const [user, setUser] = useState(null);
@@ -77,6 +78,8 @@ const AppRouter = () => {
                 <Route path="/admin/manage-accounts" element={<AdminProtectedRoute><Body content={<ManageAccounts />} /></AdminProtectedRoute>} />
                 <Route path="/admin/accounts/:userId" element={<ProtectedRoute><Body content={<AccountDetails />} /></ProtectedRoute>} />
                 <Route path="/edit/:id" element={<Body content={<EditPost />} />} /> {/* Add route for editing posts */}
+                <Route path="/user/:id" element={<User />} />
+                <Route path="/notifications" element={<Body content={<Notifications />} />}/>
             </Routes>
         </Router>
     );
