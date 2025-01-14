@@ -72,28 +72,10 @@ const NavigationBar = () => {
                     )}
                     <ListNavTag Name='Posts' Array={[{ tag: 'My Post', icon: faUsers, to: '/mypost' }]} />
                     <ListNavTag Name='Tags' Array={[{ tag: 'Tags', icon: faTag, to: '/tags' }, { tag: 'Categories', icon: faFolderOpen, to: '/categories' }]} />
-                    <ListNavTag Name='Activity' Array={[{ tag: 'Bookmarks', icon: faBookmark, to: '/bookmarks' }, { tag: 'History', icon: faHistory, to: '/history' }]} />
-                    <ListNavTag Name='' Array={[{ tag: 'Docs', icon: faFile, to: '/docs' }, { tag: 'Changelog', icon: faLink, to: '/changelog' }]} />
+                    <ListNavTag Name='Activity' Array={[{ tag: 'Bookmarks', icon: faBookmark, to: '/bookmarks' }]} />
+                    {/* <ListNavTag Name='' Array={[{ tag: 'Docs', icon: faFile, to: '/docs' }, { tag: 'Changelog', icon: faLink, to: '/changelog' }]} /> */}
                 </ul>
-                {user && (user.role === 'ADMIN' || user.role === 'MANAGER') && (
-                    <ListNavTag Name='Admin' Array={[
-                        { tag: 'Review Posts', icon: faClipboardCheck, to: '/admin/review-posts' },
-                        { tag: 'Manage Categories', icon: faFolderOpen, to: '/admin/manage-categories' },
-                        ...(user.role === 'ADMIN' ? [
-                            { tag: 'Manage Accounts', icon: faUserShield, to: '/admin/manage-accounts' },
-                            { tag: 'Statistics', icon: faChartLine, to: '/admin/statistics' }
-                        ] : [])
-                    ]} />
-                )}
-                <ul>
-                    <NavTag Icon={faBell} Tag='Notifications' to="/notifications">
-                        {unreadCount > 0 && <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>}
-                    </NavTag>
-                </ul>
-                <ListNavTag Name='Posts' Array={[{ tag: 'My Post', icon: faUsers, to: '/mypost' }]} />
-                <ListNavTag Name='Tags' Array={[{ tag: 'Tag', icon: faTag, to: '/tag' }, { tag: 'Category', icon: faFolderOpen, to: '/category' }]} />
-                <ListNavTag Name='Activity' Array={[{ tag: 'Bookmarks', icon: faBookmark, to: '/bookmarks' }, { tag: 'History', icon: faHistory, to: '/history' }]} />
-                <ListNavTag Name='' Array={[{ tag: 'Docs', icon: faFile, to: '/docs' }, { tag: 'Changelog', icon: faLink, to: '/changelog' }]} />
+                
             </div>
         </aside>
     );

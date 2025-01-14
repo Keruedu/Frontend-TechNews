@@ -190,7 +190,7 @@ const ManageAccounts = () => {
   }
 
   return (
-    <div className="ml-[15.8%] min-h-screen w-[84.2%] bg-white dark:bg-[#1E293B]">
+    <div className="ml-[15.8%] min-h-screen w-[84.2%]">
       <div className="p-6 h-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Account Management</h2>

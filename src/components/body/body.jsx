@@ -25,9 +25,6 @@ const Body = ({content = <ListContentCard/>}) => {
         { tag: 'Tag', icon: faTag, to: '/tag' },
         { tag: 'Category', icon: faFolderOpen, to: '/category' },
         { tag: 'Bookmarks', icon: faBookmark, to: '/bookmarks' },
-        { tag: 'History', icon: faHistory, to: '/history' },
-        { tag: 'Docs', icon: faFile, to: '/docs' },
-        { tag: 'Changelog', icon: faLink, to: '/changelog' }
     ];
     return (
         <>
